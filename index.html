@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MALEmaticApp - Memorizza le Formule Matematiche</title>
+    <link rel="icon" type="image/png" href="icon.png">
+    <link rel="stylesheet" href="style.css">
+    <script>
+        window.MathJax = { tex: { inlineMath: [['$', '$']], displayMath: [['$$', '$$']] }, svg: { fontCache: 'global' } };
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.11.0/math.min.js" defer></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js" defer></script>
+</head>
+<body>
+    <div class="container">
+        <div class="auth-controls">
+            <button id="loginBtn" onclick="openLoginModal()">👤 Login</button>
+            <button id="logoutBtn" class="delete-btn" onclick="logout()">Esci</button>
+        </div>
+
+        <h1>
+            <img src="icon.png" alt="MALEmatica Logo" class="logo" onerror="this.style.display='none'">
+            📐 MALEmaticApp
+        </h1>
+        <p class="subtitle">Il tuo assistente per memorizzare le formule matematiche</p>
+        <p class="subtitle" style="font-size: 0.9em; margin-top: -10px; color: #999;">
+            Sviluppato (MALE) da Antonio Moliterni (alias Ananasso Malvagio)
+            <br>
+            <a href="https://www.youtube.com/@malematica" target="_blank" class="youtube-link">
+                📺 Visita il canale YouTube MALEmatica
+            </a>
+        </p>
+
+        <div class="tab-navigation">
+            <button class="tab-button active" onclick="switchTab('formulas', this)">📚 Formulario</button>
+            <button class="tab-button" onclick="switchTab('calculator', this)">🧮 Calcolatrice</button>
+        </div>
+
+        <div id="formulas-tab" class="tab-content active">
+            
+            <div class="controls">
+                <button id="addFormulaBtn" onclick="openFormulaModal()">➕ Aggiungi Formula</button>
+                <input type="text" class="search-box" id="searchBox" placeholder="Cerca formule..." onkeyup="searchFormulas()">
+            </div>
+            
+            <div class="advanced-controls">
+                <button class="btn-secondary" onclick="exportFormulas()">📤 Esporta Formule</button>
+                <label for="importFile" class="file-input-custom">📥 Importa Formule</label>
+                <input type="file" id="importFile" accept=".json" onchange="importFormulas()" style="display: none;">
+                <button class="btn-info" onclick="printFormulas()">🖨️ Stampa/PDF</button>
+            </div>
+
+            <div id="messageContainer"></div>
+            <div class="category-filter" id="categoryFilter"></div>
+            <div class="formulas-grid" id="formulasGrid"></div>
+            <div class="empty-state" id="emptyState">
+                <h3>Nessuna formula trovata</h3>
+                <p>Usa il pulsante "Aggiungi Formula" per iniziare!</p>
+            </div>
+        </div>
+
+        <div id="calculator-tab" class="tab-content">
+            <div class="calculator-container">
+                <div class="calculator">
+                    <div class="calc-display" id="calcDisplay">0</div>
+                    <div class="calc-buttons">
+                        <button class="calc-btn function" onclick="addToDisplay('sin(')">sin</button>
+                        <button class="calc-btn function" onclick="addToDisplay('cos(')">cos</button>
+                        <button class="calc-btn function" onclick="addToDisplay('tan(')">tan</button>
+                        <button class="calc-btn function" onclick="addToDisplay('log(')">log</button>
+                        <button class="calc-btn function" onclick="addToDisplay('ln(')">ln</button>
+                        <button class="calc-btn function" onclick="addToDisplay('sqrt(')">√</button>
+                        <button class="calc-btn function" onclick="addToDisplay('^')">x^y</button>
+                        <button class="calc-btn function" onclick="addToDisplay('pi')">π</button>
+                        <button class="calc-btn function" onclick="addToDisplay('e')">e</button>
+                        <button class="calc-btn function" onclick="addToDisplay('abs(')">|x|</button>
+                        <button class="calc-btn clear" onclick="clearDisplay()">C</button>
+                        <button class="calc-btn operator" onclick="deleteLastChar()">⌫</button>
+                        <button class="calc-btn operator" onclick="addToDisplay('(')">(</button>
+                        <button class="calc-btn operator" onclick="addToDisplay(')')">)</button>
+                        <button class="calc-btn operator" onclick="addToDisplay('/')">÷</button>
+                        <button class="calc-btn number" onclick="addToDisplay('7')">7</button>
+                        <button class="calc-btn number" onclick="addToDisplay('8')">8</button>
+                        <button class="calc-btn number" onclick="addToDisplay('9')">9</button>
+                        <button class="calc-btn operator" onclick="addToDisplay('*')">×</button>
+                        <button class="calc-btn function" onclick="addToDisplay('!')">!</button>
+                        <button class="calc-btn number" onclick="addToDisplay('4')">4</button>
+                        <button class="calc-btn number" onclick="addToDisplay('5')">5</button>
+                        <button class="calc-btn number" onclick="addToDisplay('6')">6</button>
+                        <button class="calc-btn operator" onclick="addToDisplay('-')">-</button>
+                        <button class="calc-btn function" onclick="addToDisplay('%')">%</button>
+                        <button class="calc-btn number" onclick="addToDisplay('1')">1</button>
+                        <button class="calc-btn number" onclick="addToDisplay('2')">2</button>
+                        <button class="calc-btn number" onclick="addToDisplay('3')">3</button>
+                        <button class="calc-btn operator" onclick="addToDisplay('+')">+</button>
+                        <button class="calc-btn equals" onclick="calculate()">=</button>
+                        <button class="calc-btn number" onclick="addToDisplay('0')">0</button>
+                        <button class="calc-btn number" onclick="addToDisplay('.')">.</button>
+                        <button class="calc-btn operator" onclick="addToDisplay(',')">,</button>
+                    </div>
+                </div>
+                <div class="graph-section">
+                    <h3 style="color: #667eea; margin-bottom: 15px;">📊 Grafico Funzioni</h3>
+                    <div class="graph-controls">
+                        <input type="text" class="graph-input" id="functionInput" placeholder="Inserisci una funzione, es: sin(x), x^2, log(x)">
+                        <button onclick="addFunction()">➕ Aggiungi Funzione</button>
+                        <button class="btn-secondary" onclick="clearGraph()">🗑️ Pulisci Grafico</button>
+                    </div>
+                    <div id="plotArea"></div>
+                    <div class="function-list" id="functionList"></div>
+                    <div style="margin-top: 15px;">
+                        <p class="help-text"><strong>Suggerimenti:</strong> Usa x come variabile. Esempi: sin(x), cos(x), x^2, x^3, sqrt(x), log(x), exp(x), 2*x+1</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="loginModal" class="modal">
+        <div class="modal-content" style="max-width: 450px;">
+            <span class="close" onclick="closeLoginModal()">×</span>
+            <h2>Login Amministratore</h2>
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" placeholder="admin">
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" placeholder="password">
+            </div>
+            <p id="loginError" class="error-message" style="display: none; margin-top: 15px;">Credenziali non valide.</p>
+            <button onclick="login()">Accedi</button>
+        </div>
+    </div>
+    
+    <div id="formulaModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeFormulaModal()">×</span>
+            <h2 id="modalTitle">Aggiungi Nuova Formula</h2>
+            <div class="form-group"><label for="formulaTitle">Nome:</label><input type="text" id="formulaTitle" placeholder="es. Distanza tra due punti"></div>
+            <div class="form-group"><label for="formulaCategory">Categoria:</label><input type="text" id="formulaCategory" placeholder="es. Geometria Analitica"></div>
+            <div class="form-group"><label for="formulaLatex">Formula (LaTeX):</label><input type="text" id="formulaLatex" onkeyup="updatePreview()"><div class="latex-preview" id="latexPreview"></div></div>
+            <div class="form-group"><label for="formulaDescription">Descrizione:</label><textarea id="formulaDescription"></textarea></div>
+            <div class="form-group"><label for="formulaUsage">Quando si usa:</label><textarea id="formulaUsage"></textarea></div>
+            <div class="form-group"><label for="formulaExample">Esempio:</label><textarea id="formulaExample"></textarea></div>
+            <button onclick="saveFormula()" id="saveButton">💾 Salva</button>
+        </div>
+    </div>
+
+    <script src="script.js" defer></script>
+</body>
+</html>
