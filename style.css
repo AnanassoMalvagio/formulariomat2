@@ -1,0 +1,221 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    animation: fadeIn 0.5s ease-out;
+    position: relative;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+h1 {
+    color: #667eea;
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 2.5em;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+.logo {
+    width: 60px;
+    height: 60px;
+}
+
+.youtube-link {
+    color: #ff0000;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.subtitle {
+    text-align: center;
+    color: #666;
+    margin-bottom: 30px;
+    font-size: 1.1em;
+}
+
+.tab-navigation {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.tab-button {
+    background: rgba(255, 255, 255, 0.7);
+    color: #667eea;
+    border: 2px solid transparent;
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    flex: 1;
+}
+
+.tab-button.active {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+.controls, .advanced-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    align-items: center;
+}
+
+.search-box {
+    flex: 1;
+    padding: 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+button, .file-input-custom {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    transition: all 0.2s ease;
+}
+button:hover, .file-input-custom:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+.btn-secondary { background: linear-gradient(135deg, #28a745 0%, #20c997 100%); }
+.btn-info { background: linear-gradient(135deg, #17a2b8 0%, #138496 100%); }
+.delete-btn { background: #ff4757; }
+.edit-btn { background: #ffa502; }
+
+.category-filter {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+.category-tag {
+    background: #e0e0e0;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+}
+.category-tag.active {
+    background: #667eea;
+    color: white;
+}
+
+.formulas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 20px;
+}
+
+.formula-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    border: 2px solid transparent;
+    display: flex;
+    flex-direction: column;
+}
+.formula-title { font-size: 1.3em; font-weight: bold; margin-bottom: 10px; }
+.formula-latex { background: #f5f5f5; padding: 15px; border-radius: 8px; margin: 10px 0; text-align: center; min-height: 60px; display: flex; align-items: center; justify-content: center; }
+.formula-description { margin: 10px 0; line-height: 1.6; }
+.formula-usage { background: #e8f4f8; padding: 12px; border-radius: 8px; margin: 10px 0; }
+.formula-example { background: #f0f8ff; padding: 12px; border-radius: 8px; margin: 10px 0; font-family: 'Courier New', monospace; }
+.formula-actions { margin-top: auto; } /* Spinge i bottoni in fondo alla card */
+
+.modal {
+    display: none; position: fixed; top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.5); z-index: 1000;
+}
+.modal-content {
+    background: white; margin: 5% auto; padding: 30px;
+    width: 90%; max-width: 700px; max-height: 85vh;
+    overflow-y: auto; border-radius: 12px; position: relative;
+    animation: slideIn 0.3s ease-out;
+}
+@keyframes slideIn { from { transform: translateY(-30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+.close { position: absolute; right: 20px; top: 20px; font-size: 28px; cursor: pointer; color: #aaa; }
+.close:hover { color: #333; }
+.form-group { margin-bottom: 20px; }
+label { display: block; margin-bottom: 5px; font-weight: bold; }
+input[type="text"], input[type="password"], textarea {
+    width: 100%; padding: 10px; border: 2px solid #e0e0e0;
+    border-radius: 8px; font-size: 16px;
+}
+textarea { resize: vertical; min-height: 80px; }
+
+.success-message { background: #d4edda; color: #155724; padding: 12px; border-radius: 8px; margin: 10px 0; }
+.error-message { background: #f8d7da; color: #721c24; padding: 12px; border-radius: 8px; margin: 10px 0; }
+.empty-state { text-align: center; padding: 60px 20px; color: #999; }
+
+.auth-controls {
+    position: absolute;
+    top: 25px;
+    right: 30px;
+    display: flex;
+    gap: 10px;
+    z-index: 10;
+}
+.auth-controls button {
+    width: auto;
+    padding: 8px 16px;
+    font-size: 14px;
+}
+
+#addFormulaBtn,
+.formula-actions {
+    display: none;
+}
+body.logged-in #addFormulaBtn {
+    display: inline-block;
+}
+body.logged-in .formula-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 15px;
+}
+
+@media (max-width: 768px) {
+    body { padding: 10px; }
+    .container { padding: 20px; }
+    .auth-controls { position: static; margin-bottom: 20px; flex-direction: column; }
+    .auth-controls button { width: 100%; padding: 12px; }
+    .controls, .advanced-controls { flex-direction: column; }
+}
